@@ -1,4 +1,15 @@
 .vscode/settings.json
 
-# binary
-nicochuu
+# dependencies
+node_modules/
+
+# env
+.env
+.envrc
+
+# generated files
+gen/
+
+# test DB
+test.db
+

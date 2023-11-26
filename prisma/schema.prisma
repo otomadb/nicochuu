@@ -1,0 +1,27 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model NicovideoVideo {
+  id String @id @default(cuid())
+
+  sourceId String   @unique /// ニコニコ動画側のID
+  postedAt DateTime /// ニコニコ動画側の公開日時
+
+  title       String
+  description String
+  tags        String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  checked Boolean @default(false)
+}

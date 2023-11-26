@@ -1,0 +1,25 @@
+name: otomadb-nicochuu
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15@sha256:da76f1e3d9a1728600f062ba02d8e46b9c521012e87d402ce03e38ef0389979f
+    healthcheck:
+      test: pg_isready
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - target: 5432
+        published: 15432
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: test
+    volumes:
+      - type: volume
+        source: postgres_data
+        target: /var/lib/postgresql/data
+
+volumes:
+  postgres_data:
