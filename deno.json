@@ -1,6 +1,6 @@
 {
   "tasks": {
     "dev": "deno run --watch main.ts",
-    "compile": "deno compile --allow-net --output nicotagwatcher main.ts"
+    "compile": "deno compile --allow-net --output nicochuu main.ts"
   }
 }

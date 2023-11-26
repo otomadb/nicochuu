@@ -9,6 +9,6 @@ FROM gcr.io/distroless/static-debian12 AS runner
 
 WORKDIR /app
 
-COPY --from=builder /app/nicotagwatcher .
+COPY --from=builder /app/nicochuu .
 
-CMD ["/app/nicotagwatcher"]
+CMD ["/app/nicochuu"]
