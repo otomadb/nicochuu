@@ -8,7 +8,9 @@
     "start": "tsx server.ts",
     "build": "rollup -c rollup.config.js",
     "generate:buf": "buf generate ./proto",
-    "generate:prisma": "prisma generate"
+    "generate:prisma": "prisma generate",
+    "typecheck": "tsc --noEmit",
+    "lint:prettier": "prettier --check ."
   },
   "packageManager": "npm@9.6.7",
   "dependencies": {
