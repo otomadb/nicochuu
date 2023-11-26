@@ -29,7 +29,11 @@ const prisma = new PrismaClient();
 const scrapeTask = new AsyncTask(
   "scrape",
   async () => {
-    const result = await scrape({ tags: scrapeTags, range: scrapeDuration, today: new Date() });
+    const result = await scrape({
+      tags: scrapeTags,
+      duration: scrapeDuration * 1000,
+      today: new Date(),
+    });
     await prisma.$transaction(
       result.videos.map((video) =>
         prisma.nicovideoVideo.upsert({
