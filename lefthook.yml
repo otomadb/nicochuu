@@ -2,7 +2,7 @@ pre-push:
   parallel: true
   commands:
     packages-audit:
-      run: pnpm audit
+      run: npm audit
 
 pre-commit:
   parallel: true
@@ -10,7 +10,7 @@ pre-commit:
     prettier:
       glob: "*.{js,ts,jsx,tsx,md,html,json,yml,yaml,graphql}"
       run: |
-        pnpm prettier --write --ignore-unknown {staged_files}
+        npm prettier --write --ignore-unknown {staged_files}
         git add {staged_files}
       skip:
         - merge

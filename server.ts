@@ -52,9 +52,9 @@ const scrapeTask = new AsyncTask(
   },
   () => {},
 );
+const scrapeJob = new SimpleIntervalJob({ seconds: scrapeInterval, runImmediately: true }, scrapeTask);
 
-const server = fastify();
-
+const server = fastify({ logger: true });
 await server.register(fastifySchedule);
 await server.register(fastifyConnectPlugin, { routes });
 
@@ -65,6 +65,10 @@ server.get("/", (_, reply) => {
 
 await server.ready();
 
-await server.scheduler.addSimpleIntervalJob(new SimpleIntervalJob({ seconds: scrapeInterval }, scrapeTask));
-await server.listen({ host: "localhost", port: 58080 });
+await server.scheduler.addSimpleIntervalJob(scrapeJob);
+
+await server.listen({
+  host: process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost",
+  port: 58080,
+});
 console.log("server is listening at", server.addresses());

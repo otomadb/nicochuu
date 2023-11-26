@@ -1,0 +1,9 @@
+# deps
+package-lock.json
+
+# generated files
+gen/
+prisma/migrations
+
+# output
+dist/
