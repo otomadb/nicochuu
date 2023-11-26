@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package com.otomadb.nicochuu.v1;
 
-service Accessor {
+service NicochuuService {
   rpc ListVideos(ListVideoRequest) returns (ListVideoResponse) {}
   rpc GetVideo(GetVideoRequest) returns (GetVideoResponse) {}
   rpc CheckVideo(CheckVideoRequest) returns (CheckVideoResponse) {}

@@ -1,11 +1,11 @@
 import { ConnectRouter } from "@connectrpc/connect";
 import { PrismaClient } from "@prisma/client";
-import { Accessor } from "./gen/nicochuu_connect.js";
+import { NicochuuService } from "./gen/nicochuu_connect.js";
 
 const prisma = new PrismaClient();
 
 export default (router: ConnectRouter) =>
-  router.service(Accessor, {
+  router.service(NicochuuService, {
     listVideos: async (req) => {
       const [total, videos] = await prisma.$transaction([
         prisma.nicovideoVideo.count({
