@@ -1,15 +1,18 @@
 import { z } from "zod";
 
 const $response = z.object({
-  data: z.array(
-    z.object({
-      contentId: z.string(),
-      startTime: z.string().datetime({ offset: true }),
-    }),
-  ),
+  data: z.object({
+    items: z.array(
+      z.object({
+        content: z.object({
+          id: z.string(),
+          registeredAt: z.string().datetime({ offset: true }),
+        }),
+      }),
+    ),
+  }),
   meta: z.object({
     status: z.literal(200),
-    totalCount: z.number(),
   }),
 });
 
@@ -28,24 +31,14 @@ export function parseISOString(date: Date) {
 }
 
 export function buildUrl({ tags, duration: range, today }: { tags: string[]; today: Date; duration: number }) {
-  const url = new URL("/api/v2/snapshot/video/contents/search", "https://api.search.nicovideo.jp");
-
-  url.searchParams.set("q", tags.join(" OR "));
-  url.searchParams.set("targets", "tagsExact");
-  url.searchParams.set("fields", ["contentId", "startTime"].join(","));
-  url.searchParams.set("_sort", "startTime");
-  url.searchParams.set("_limit", (100).toString());
-
-  url.searchParams.set(
-    "jsonFilter",
-    JSON.stringify({
-      type: "range",
-      field: "startTime",
-      from: parseISOString(new Date(today.getTime() - range)),
-      to: parseISOString(today),
-      include_lower: false,
-    }),
-  );
+  const url = new URL("/v1/playlist/search", "https://nvapi.nicovideo.jp");
+  url.searchParams.set("tag", tags.join(" "));
+  url.searchParams.set("sortKey", "registeredAt");
+  url.searchParams.set("sortOrder", "desc");
+  url.searchParams.set("pageSize", (64).toString());
+  url.searchParams.set("page", (1).toString());
+  url.searchParams.set("_frontendId", "6");
+  url.searchParams.set("_frontendVersion", "0");
 
   return url.toString();
 }
@@ -61,10 +54,9 @@ export async function scrape({ tags, duration: duration, today }: { tags: string
   }
 
   return {
-    count: parsedData.data.meta.totalCount,
-    videos: parsedData.data.data.map((v) => ({
-      sourceId: v.contentId,
-      postedAt: new Date(v.startTime),
+    videos: parsedData.data.data.items.map((v) => ({
+      sourceId: v.content.id,
+      postedAt: new Date(v.content.registeredAt),
     })),
   };
 }
