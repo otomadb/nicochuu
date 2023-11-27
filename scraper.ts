@@ -16,20 +16,6 @@ const $response = z.object({
   }),
 });
 
-/**
- * `YYYY-MM-DDThh:mm:ss±09:mm`の形式しか受け付けていない
- */
-export function parseISOString(date: Date) {
-  const offset = new Date(date.getTime() + 1000 * 60 * 60 * 9);
-  const Y = offset.getUTCFullYear();
-  const M = (offset.getUTCMonth() + 1).toString().padStart(2, "0");
-  const D = offset.getUTCDate().toString().padStart(2, "0");
-  const h = offset.getUTCHours().toString().padStart(2, "0");
-  const m = offset.getUTCMinutes().toString().padStart(2, "0");
-  const s = offset.getUTCSeconds().toString().padStart(2, "0");
-  return `${Y}-${M}-${D}T${h}:${m}:${s}+09:00`;
-}
-
 export function buildUrl({ tags, duration: range, today }: { tags: string[]; today: Date; duration: number }) {
   const url = new URL("/v1/playlist/search", "https://nvapi.nicovideo.jp");
   url.searchParams.set("tag", tags.join(" "));
