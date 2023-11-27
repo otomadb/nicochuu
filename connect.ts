@@ -16,14 +16,7 @@ export default (router: ConnectRouter) =>
           skip: req.skip,
           where: { checked: false },
           orderBy: { postedAt: "desc" },
-          select: {
-            id: true,
-            sourceId: true,
-            postedAt: true,
-            title: true,
-            description: true,
-            tags: true,
-          },
+          select: { id: true, sourceId: true, postedAt: true },
         }),
       ]);
       return {
@@ -38,26 +31,10 @@ export default (router: ConnectRouter) =>
       return {
         video: await prisma.nicovideoVideo
           .findUnique({
-            where: {
-              sourceId: req.sourceId,
-            },
-            select: {
-              id: true,
-              sourceId: true,
-              postedAt: true,
-              title: true,
-              description: true,
-              tags: true,
-            },
+            where: { sourceId: req.sourceId },
+            select: { sourceId: true, postedAt: true },
           })
-          .then((video) =>
-            video
-              ? {
-                  ...video,
-                  postedAt: video.postedAt.toISOString(),
-                }
-              : undefined,
-          ),
+          .then((video) => (video ? { ...video, postedAt: video.postedAt.toISOString() } : undefined)),
       };
     },
     checkVideo: async (req) => {

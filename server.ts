@@ -38,18 +38,8 @@ const scrapeTask = new AsyncTask(
       result.videos.map((video) =>
         prisma.nicovideoVideo.upsert({
           where: { sourceId: video.sourceId },
-          create: {
-            sourceId: video.sourceId,
-            title: video.title,
-            tags: video.tags,
-            description: video.description,
-            postedAt: new Date(video.postedAt),
-          },
-          update: {
-            title: video.title,
-            tags: video.tags,
-            description: video.description,
-          },
+          create: { sourceId: video.sourceId, postedAt: new Date(video.postedAt) },
+          update: {},
         }),
       ),
     );

@@ -16,10 +16,6 @@ model NicovideoVideo {
   sourceId String   @unique /// ニコニコ動画側のID
   postedAt DateTime /// ニコニコ動画側の公開日時
 
-  title       String
-  description String
-  tags        String[]
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

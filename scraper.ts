@@ -4,9 +4,6 @@ const $response = z.object({
   data: z.array(
     z.object({
       contentId: z.string(),
-      title: z.string(),
-      tags: z.string(),
-      description: z.string(),
       startTime: z.string().datetime({ offset: true }),
     }),
   ),
@@ -35,7 +32,7 @@ export function buildUrl({ tags, duration: range, today }: { tags: string[]; tod
 
   url.searchParams.set("q", tags.join(" OR "));
   url.searchParams.set("targets", "tagsExact");
-  url.searchParams.set("fields", ["contentId", "title", "tags", "startTime", "description"].join(","));
+  url.searchParams.set("fields", ["contentId", "startTime"].join(","));
   url.searchParams.set("_sort", "startTime");
   url.searchParams.set("_limit", (100).toString());
 
@@ -67,9 +64,6 @@ export async function scrape({ tags, duration: duration, today }: { tags: string
     count: parsedData.data.meta.totalCount,
     videos: parsedData.data.data.map((v) => ({
       sourceId: v.contentId,
-      title: v.title,
-      description: v.description,
-      tags: v.tags.split(" "),
       postedAt: new Date(v.startTime),
     })),
   };
