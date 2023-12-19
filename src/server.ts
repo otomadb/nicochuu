@@ -36,9 +36,9 @@ const scrapeTask = new AsyncTask(
     });
     await prisma.$transaction(
       result.videos.map((video) =>
-        prisma.nicovideoVideo.upsert({
+        prisma.nicovideoNewVideo.upsert({
           where: { sourceId: video.sourceId },
-          create: { sourceId: video.sourceId, postedAt: new Date(video.postedAt) },
+          create: { sourceId: video.sourceId, registeredAt: new Date(video.postedAt) },
           update: {},
         }),
       ),

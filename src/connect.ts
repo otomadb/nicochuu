@@ -1,6 +1,6 @@
 import { ConnectRouter } from "@connectrpc/connect";
 import { PrismaClient } from "@prisma/client";
-import { NicochuuService } from "./gen/nicochuu_connect.js";
+import { NicochuuService } from "../gen/nicochuu_connect.js";
 
 const prisma = new PrismaClient();
 
@@ -8,37 +8,37 @@ export default (router: ConnectRouter) =>
   router.service(NicochuuService, {
     listVideos: async (req) => {
       const [total, videos] = await prisma.$transaction([
-        prisma.nicovideoVideo.count({
+        prisma.nicovideoNewVideo.count({
           where: { checked: false },
         }),
-        prisma.nicovideoVideo.findMany({
+        prisma.nicovideoNewVideo.findMany({
           take: req.take,
           skip: req.skip,
           where: { checked: false },
-          orderBy: { postedAt: "desc" },
-          select: { id: true, sourceId: true, postedAt: true },
+          orderBy: { registeredAt: "desc" },
+          select: { id: true, sourceId: true, registeredAt: true },
         }),
       ]);
       return {
         total: total,
-        videos: videos.map(({ postedAt, ...props }) => ({
-          postedAt: postedAt.toISOString(),
+        videos: videos.map(({ registeredAt, ...props }) => ({
+          postedAt: registeredAt.toISOString(),
           ...props,
         })),
       };
     },
     getVideo: async (req) => {
       return {
-        video: await prisma.nicovideoVideo
+        video: await prisma.nicovideoNewVideo
           .findUnique({
             where: { sourceId: req.sourceId },
-            select: { sourceId: true, postedAt: true },
+            select: { sourceId: true, registeredAt: true },
           })
-          .then((video) => (video ? { ...video, postedAt: video.postedAt.toISOString() } : undefined)),
+          .then((video) => (video ? { ...video, postedAt: video.registeredAt.toISOString() } : undefined)),
       };
     },
     checkVideo: async (req) => {
-      return prisma.nicovideoVideo
+      return prisma.nicovideoNewVideo
         .update({
           where: { sourceId: req.sourceId },
           data: { checked: true },
